@@ -49,7 +49,6 @@ def verificar_versao_atual_banco(versao_local):
 
             if sistema_banco:
                 print(f"Versão mais recente encontrada no banco: {sistema_banco.version}")
-                print(f"Iniciando processo de atualização...")
                 atualizar_sistema()
                 return True
             else:
@@ -67,7 +66,6 @@ def atualizar_sistema():
     
     try:
         with Database() as banco:
-            print(f"Buscando versão mais recente no banco de dados...")
             sistema_banco = banco.execute(
                 select(SistemaDB.version, SistemaDB.arquivo)
                 .order_by(SistemaDB.version.desc())
@@ -76,7 +74,6 @@ def atualizar_sistema():
 
             if sistema_banco:
                 versao_banco = sistema_banco.version
-                print(f"Versão encontrada no banco: {versao_banco}")
                 
                 diretorio_destino = f"./static/sistemas/main/{versao_banco}"
                 print(f"Diretório de destino criado: {diretorio_destino}")
@@ -86,7 +83,6 @@ def atualizar_sistema():
                     print(f"Processo concluído - versão {versao_banco} disponível")
                     return versao_banco
                 
-                print(f"Criando diretório: {diretorio_destino}")
                 os.makedirs(diretorio_destino, exist_ok=True)
                 
                 arquivo_origem = './output/main.exe'
