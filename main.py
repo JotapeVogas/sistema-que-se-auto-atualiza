@@ -41,10 +41,14 @@ def verificar_versao_atual_banco(versao_local):
     
     try:
         with Database() as banco:
-            resultado = banco.execute(select(SistemaDB.version))
+            sistema_banco = banco.execute(
+                select(SistemaDB.version, SistemaDB.arquivo)
+                .order_by(SistemaDB.version.desc())
+                .limit(1)
+            ).fetchone()
 
-            if resultado:
-                print(f"Versão mais recente encontrada no banco: {resultado}")
+            if sistema_banco:
+                print(f"Versão mais recente encontrada no banco: {sistema_banco.version}")
                 print(f"Iniciando processo de atualização...")
                 atualizar_sistema()
                 return True
@@ -73,10 +77,9 @@ def atualizar_sistema():
             if sistema_banco:
                 versao_banco = sistema_banco.version
                 print(f"Versão encontrada no banco: {versao_banco}")
-                print(f"Arquivo associado: {sistema_banco.arquivo}")
                 
                 diretorio_destino = f"./static/sistemas/main/{versao_banco}"
-                print(f"Diretório de destino: {diretorio_destino}")
+                print(f"Diretório de destino criado: {diretorio_destino}")
                 
                 if os.path.exists(diretorio_destino):
                     print(f"Diretório já existe - versão {versao_banco} já foi baixada anteriormente")
@@ -130,7 +133,7 @@ def atualizar_sistema():
 
 def fechar(versao_nova):
     print(f"\nOperação concluída! Nova versão {versao_nova} criada.")
-    print("Fechando em 10 segundos...")
+    print("Abrindo em 10 segundos...")
     time.sleep(10)
     
     arquivo_executar = os.path.abspath(f"./static/sistemas/main/{versao_nova}/main{versao_nova}.exe")
@@ -172,9 +175,6 @@ def obter_versao_atual_local():
     except FileNotFoundError:
         print("❌ Pasta ./static/sistemas/main/ não encontrada")
         return 0
-
-caminho = get_caminho_executavel()
-print(f"Caminho do executável/script: {caminho}")
 
 versao_atual = obter_versao_atual_local()
 alterar = verificar_versao_atual_banco(versao_atual)
