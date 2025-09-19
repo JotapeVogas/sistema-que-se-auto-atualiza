@@ -21,4 +21,10 @@ pip-selfcheck.json
 static/
 output/
 
+att/
+main_peli.py
+teste.py
+.vscode/
+exe_config.json
+*.exe
 # End of https://www.toptal.com/developers/gitignore/api/venv,dotenv
