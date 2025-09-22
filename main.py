@@ -121,11 +121,10 @@ def atualizar_sistema(objeto_completo):
                 print(f"Nova versão {objeto_banco_versao} criada com sucesso!")
                 print(f"Localização: {diretorio_destino}")
                 print(f"Iniciando execução da nova versão...")
-                input("Aperte Enter para continuar")
-                fechar(objeto_completo)
+                fechar()
+                print(f"Processo de atualização concluído.")
             else:
                 print(f"❌ Erro: Arquivo não foi salvo corretamente")
-                return False
         else:
             print("❌ Nenhuma versão encontrada no banco de dados")
             print("❌ Verifique se há registros na tabela 'sistemas'")
@@ -135,17 +134,19 @@ def atualizar_sistema(objeto_completo):
         print(f"❌ Possíveis causas: conexão com banco, permissões de arquivo, espaço em disco")
     
 #fecha o arquivo que esta rodando e abre o novo
-def fechar(objeto_completo):
+def fechar():
             try:
-                #!USAR SOMENTE QUANDO VIRAR .EXE
-                # arquivo_executar = os.path.abspath(f"{CAMINHO_SISTEMAS}\\{objeto_banco_nome}\\{objeto_banco_versao}\\{objeto_banco_nome}{objeto_banco_versao}.{tipo_de_arquivo}")
-                #!USAR SOMENTE EM QUANTO FOR .PY
-                arquivo_executar = os.path.abspath(f"{CAMINHO_SISTEMAS}\\{objeto_banco_nome}\\{objeto_banco_versao}\\{objeto_banco_nome}{objeto_banco_versao}.exe")
-                    
+                if tipo_de_arquivo == '.py':
+                    arquivo_executar = os.path.abspath(f"{CAMINHO_SISTEMAS}\\{objeto_banco_nome}\\{objeto_banco_versao}\\{objeto_banco_nome}{objeto_banco_versao}.exe")
+                else:
+                    arquivo_executar = os.path.abspath(f"{CAMINHO_SISTEMAS}\\{objeto_banco_nome}\\{objeto_banco_versao}\\{objeto_banco_nome}{objeto_banco_versao}{tipo_de_arquivo}")
+                
                 if os.path.exists(arquivo_executar):
                     print(f"🚀🚀 Iniciando: {arquivo_executar}")
                     os.startfile(arquivo_executar)
                     sys.exit(0)
+                else:
+                    print(f"❌ Erro: Arquivo para executar não encontrado em {arquivo_executar}")
             except Exception as E:
                 print(f"❌ Erro durante a cópia do arquivo:")
                 print(f"❌ Detalhes: {E}")
